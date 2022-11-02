@@ -48,6 +48,13 @@
             <version>3.4.1</version>
         </dependency>
 
+        <!--mybatis-plus 代码生成器依赖-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+
         <!-- swagger2 依赖 -->
         <dependency>
             <groupId>io.springfox</groupId>

@@ -1,0 +1,16 @@
+package com.mo.service;
+
+import com.mo.model.User;
+import com.baomidou.mybatisplus.extension.service.IService;
+
+/**
+ * <p>
+ * 用户表 服务类
+ * </p>
+ *
+ * @author mo
+ * @since 2022-11-02
+ */
+public interface IUserService extends IService<User> {
+
+}
