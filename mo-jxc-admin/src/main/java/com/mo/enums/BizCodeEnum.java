@@ -16,7 +16,9 @@ public enum BizCodeEnum {
      */
     USER_UNREGISTER(230002, "账号不存在"),
     USER_PWD_ERROR(230003, "账号或者密码错误"),
-    USER_UNLOGIN(230004, "账号未登录");
+    USER_UNLOGIN(230004, "账号未登录"),
+    USER_NAMEEMPTY(230005, "用户名不能为空!"),
+    USER_PWDEMPTY(230005, "用户名不能为空!");
 
     @Getter
     private int code;

@@ -14,4 +14,10 @@ public class AssertUtil {
             throw new BizException(bizCodeEnum);
         }
     }
+
+    public static void isTrue(Boolean flag, Integer code, String msg) {
+        if (flag) {
+            throw new BizException(code, msg);
+        }
+    }
 }
