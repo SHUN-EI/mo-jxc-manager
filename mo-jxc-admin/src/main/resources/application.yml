@@ -28,7 +28,8 @@ spring:
       connection-timeout: 30000
       # 测试连接是否可用的查询语句
       connection-test-query: SELECT 1
-  freemarker: # freemarker配置
+  # freemarker配置
+  freemarker:
     suffix: .ftl
     content-type: text/html
     charset: UTF-8
