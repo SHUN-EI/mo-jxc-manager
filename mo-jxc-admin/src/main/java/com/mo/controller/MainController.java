@@ -1,13 +1,15 @@
 package com.mo.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by mo on 2022/10/31
  */
-@RestController
+@Controller
 @Slf4j
 public class MainController {
 
@@ -16,7 +18,7 @@ public class MainController {
      *
      * @return
      */
-    @RequestMapping("welcome")
+    @GetMapping("welcome")
     public String welcome() {
         return "welcome";
     }
@@ -26,7 +28,7 @@ public class MainController {
      *
      * @return
      */
-    @RequestMapping("main")
+    @GetMapping("main")
     public String main() {
         return "main";
     }
@@ -36,7 +38,7 @@ public class MainController {
      *
      * @return
      */
-    @RequestMapping("index")
+    @GetMapping("index")
     public String index() {
         return "index";
     }
