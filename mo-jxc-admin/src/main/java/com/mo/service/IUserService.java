@@ -2,6 +2,7 @@ package com.mo.service;
 
 import com.mo.model.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mo.request.UserUpdateRequest;
 
 /**
  * <p>
@@ -14,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IUserService extends IService<User> {
 
     User login(String userName, String password);
+
+    User updateUserInfo(UserUpdateRequest request);
 }

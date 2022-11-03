@@ -1,7 +1,9 @@
 package com.mo.controller;
 
 
+import com.mo.enums.BizCodeEnum;
 import com.mo.model.User;
+import com.mo.request.UserUpdateRequest;
 import com.mo.service.IUserService;
 import com.mo.utils.RespBean;
 import io.swagger.annotations.Api;
@@ -24,12 +26,33 @@ import javax.servlet.http.HttpSession;
  * @since 2022-11-02
  */
 @Api(tags = "用户模块")
-@RestController
+@Controller
 @RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private IUserService userService;
+
+    @ApiOperation("用户信息设置页面")
+    @RequestMapping("/setting")
+    public String setting(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        //用户修改后数据变化，更新用户到会话中
+        User updateUser = userService.getById(user.getId());
+        session.setAttribute("user", updateUser);
+        return "user/setting";
+
+    }
+
+    @ApiOperation("用户信息更新")
+    @RequestMapping("/updateUserInfo")
+    @ResponseBody
+    public RespBean updateUserInfo(UserUpdateRequest request) {
+        User user = userService.updateUserInfo(request);
+        return null != user ? RespBean.success("用户信息更新成功", user) :
+                RespBean.buildResult(BizCodeEnum.USER_UPDATEFAIL);
+
+    }
 
     @ApiOperation("用户登录")
     @RequestMapping("/login")
