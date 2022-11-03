@@ -19,7 +19,7 @@ public class RespBean {
     @ApiModelProperty(value = "响应状态码")
     private Integer code;
     @ApiModelProperty(value = "响应消息")
-    private String msg;
+    private String message;
     @ApiModelProperty(value = "响应结果数据")
     private Object data;
 

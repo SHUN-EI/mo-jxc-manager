@@ -60,7 +60,8 @@ public class UserController {
     public RespBean login(String userName, String password, HttpSession httpSession) {
         User user = userService.login(userName, password);
         httpSession.setAttribute("user", user);
-        return RespBean.success("用户登录成功!", user);
+        return null != user ? RespBean.success("用户登录成功!", user) :
+                RespBean.buildResult(BizCodeEnum.USER_UNREGISTER);
     }
 
 }
