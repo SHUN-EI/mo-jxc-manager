@@ -31,6 +31,40 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private UserMapper userMapper;
 
     /**
+     * 用户密码更新
+     *
+     * @param userName
+     * @param oldPassword
+     * @param newPassword
+     * @param confirmPassword
+     * @return
+     */
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public User updateUserPassword(String userName, String oldPassword, String newPassword, String confirmPassword) {
+
+        User user = null;
+        user = findByUserName(userName);
+
+        //用户名非空 必须存在
+        AssertUtil.isTrue(null == user, BizCodeEnum.USER_UNREGISTER);
+        AssertUtil.isTrue(StringUtil.isEmpty(oldPassword), BizCodeEnum.USER_OLDPWDEMPTY);
+        AssertUtil.isTrue(StringUtil.isEmpty(newPassword), BizCodeEnum.USER_NEWPWDEMPTY);
+        AssertUtil.isTrue(StringUtil.isEmpty(confirmPassword), BizCodeEnum.USER_CONFIRMPWDEMPTY);
+
+        AssertUtil.isTrue(!(user.getPassword().equals(oldPassword)), BizCodeEnum.USER_OLDPWDERROR);
+        AssertUtil.isTrue(!(newPassword.equals(confirmPassword)), BizCodeEnum.USER_NEWPWDERROR);
+        AssertUtil.isTrue(newPassword.equals(oldPassword), BizCodeEnum.USER_OLDNEWPWDERROR);
+
+        //更新用户密码
+        user.setPassword(newPassword);
+        int result = userMapper.updateById(user);
+
+        return result > 0 ? user : null;
+    }
+
+
+    /**
      * 用户信息更新
      *
      * @param request

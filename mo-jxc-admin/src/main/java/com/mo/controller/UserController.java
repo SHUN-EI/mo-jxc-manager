@@ -33,6 +33,25 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
+
+    @ApiOperation("用户密码更新")
+    @RequestMapping("/updateUserPassword")
+    public RespBean updateUserPassword(String oldPassword, String newPassword,
+                                       String confirmPassword, HttpSession session) {
+
+        User user = (User) session.getAttribute("user");
+        User updateUser = userService.updateUserPassword(user.getUserName(), oldPassword, newPassword, confirmPassword);
+        return null != updateUser ? RespBean.success("用户密码更新成功", updateUser) :
+                RespBean.buildResult(BizCodeEnum.USER_UPDATEPWDERROR);
+
+    }
+
+    @ApiOperation("用户密码更新页")
+    @RequestMapping("/password")
+    public String password() {
+        return "user/password";
+    }
+
     @ApiOperation("用户信息设置页面")
     @RequestMapping("/setting")
     public String setting(HttpSession session) {

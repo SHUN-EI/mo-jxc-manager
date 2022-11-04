@@ -11,19 +11,19 @@ import lombok.Data;
 public class BizException extends RuntimeException {
 
     private Integer code;
-    private String msg;
+    private String message;
 
 
     public BizException(Integer code, String msg) {
         super(msg);
         this.code = code;
-        this.msg = msg;
+        this.message = msg;
     }
 
     public BizException(BizCodeEnum bizCodeEnum) {
         super(bizCodeEnum.getMsg());
         this.code = bizCodeEnum.getCode();
-        this.msg = bizCodeEnum.getMsg();
+        this.message = bizCodeEnum.getMsg();
     }
 
 
