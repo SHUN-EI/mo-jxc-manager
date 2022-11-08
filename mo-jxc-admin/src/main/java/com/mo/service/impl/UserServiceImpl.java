@@ -115,7 +115,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      * @param userName
      * @return
      */
-    private User findByUserName(String userName) {
+    public User findByUserName(String userName) {
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("is_del", 0)
                 .eq("user_name", userName));
 

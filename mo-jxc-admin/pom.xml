@@ -75,6 +75,13 @@
             <version>2.0.12</version>
         </dependency>
 
+
+        <!--spring security 组件-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

@@ -16,6 +16,8 @@ public interface IUserService extends IService<User> {
 
     User login(String userName, String password);
 
+    User findByUserName(String userName);
+
     User updateUserInfo(UserUpdateRequest request);
 
     User updateUserPassword(String userName, String oldPassword, String newPassword, String confirmPassword);

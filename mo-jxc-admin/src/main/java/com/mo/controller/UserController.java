@@ -40,7 +40,7 @@ public class UserController {
                                        String confirmPassword, HttpSession session) {
 
         User user = (User) session.getAttribute("user");
-        User updateUser = userService.updateUserPassword(user.getUserName(), oldPassword, newPassword, confirmPassword);
+        User updateUser = userService.updateUserPassword(user.getUsername(), oldPassword, newPassword, confirmPassword);
         return null != updateUser ? RespBean.success("用户密码更新成功", updateUser) :
                 RespBean.buildResult(BizCodeEnum.USER_UPDATEPWDERROR);
 
