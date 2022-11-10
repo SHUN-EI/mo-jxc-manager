@@ -16,8 +16,14 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 public class MainController {
 
-    @ApiOperation("用户退出")
-    @RequestMapping("signout")
+    /**
+     * 引入Spring-Security后不再使用此接口,转而使用Spring-Security提供的退出
+     *
+     * @param session
+     * @return
+     */
+    //@ApiOperation("用户退出")
+    //@RequestMapping("signout")
     public String signout(HttpSession session) {
         session.removeAttribute("user");
         return "redirect:index";

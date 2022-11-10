@@ -34,6 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JxcAuthenticationFailedHandler jxcAuthenticationFailedHandler;
     @Autowired
+    private JxcLogoutSuccessHandler jxcLogoutSuccessHandler;
+    @Autowired
     private IUserService userService;
 
 
@@ -95,6 +97,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login")
                 .successHandler(jxcAuthenticationSuccessHandler)
                 .failureHandler(jxcAuthenticationFailedHandler)
+                .and()
+                .logout()
+                .logoutUrl("/signout")
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessHandler(jxcLogoutSuccessHandler)
                 .and()
                 .authorizeRequests()
                 //放行登录页
