@@ -9,6 +9,7 @@ import com.mo.utils.RespBean;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -73,6 +74,16 @@ public class UserController {
 
     }
 
+
+    /**
+     * 引入Spring-Security后不再使用此接口,转而使用Spring-Security提供的登录
+     *
+     * @param userName
+     * @param password
+     * @param httpSession
+     * @return
+     */
+    @Deprecated
     @ApiOperation("用户登录")
     @RequestMapping("/login")
     @ResponseBody
