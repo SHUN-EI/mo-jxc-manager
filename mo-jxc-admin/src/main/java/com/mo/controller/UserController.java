@@ -38,10 +38,12 @@ public class UserController {
 
     @ApiOperation("用户密码更新")
     @RequestMapping("/updateUserPassword")
+    @ResponseBody
     public RespBean updateUserPassword(String oldPassword, String newPassword,
                                        String confirmPassword, Principal principal) {
 
         User updateUser = userService.updateUserPassword(principal.getName(), oldPassword, newPassword, confirmPassword);
+
         return null != updateUser ? RespBean.success("用户密码更新成功", updateUser) :
                 RespBean.buildResult(BizCodeEnum.USER_UPDATEPWDERROR);
 
@@ -74,6 +76,7 @@ public class UserController {
 
 
     /**
+     * 过期
      * 引入Spring-Security后不再使用此接口,转而使用Spring-Security提供的登录
      *
      * @param userName
@@ -81,10 +84,6 @@ public class UserController {
      * @param httpSession
      * @return
      */
-    @Deprecated
-    @ApiOperation("用户登录")
-    @RequestMapping("/login")
-    @ResponseBody
     public RespBean login(String userName, String password, HttpSession httpSession) {
         User user = userService.login(userName, password);
         httpSession.setAttribute("user", user);
