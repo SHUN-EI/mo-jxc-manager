@@ -8,8 +8,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Created by mo on 2022/11/5
+ * 引入Spring-Security 后就不需要这个
  */
-@Configuration
+//@Configuration
 public class InterceptorConfig implements WebMvcConfigurer {
 
     //单例模式，项目启动初始化一个登录拦截器

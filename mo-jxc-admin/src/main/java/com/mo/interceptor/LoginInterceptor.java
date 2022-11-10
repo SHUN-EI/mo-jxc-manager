@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by mo on 2022/11/5
  * 登录拦截器
+ * 引入Spring-Security 后就不需要这个
  */
 public class LoginInterceptor implements HandlerInterceptor {
 
