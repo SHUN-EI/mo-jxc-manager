@@ -12,6 +12,7 @@ import com.mo.utils.AssertUtil;
 import com.mo.utils.StringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private PasswordEncoder encoder;
 
     /**
      * 用户密码更新
@@ -52,12 +55,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         AssertUtil.isTrue(StringUtil.isEmpty(newPassword), BizCodeEnum.USER_NEWPWDEMPTY);
         AssertUtil.isTrue(StringUtil.isEmpty(confirmPassword), BizCodeEnum.USER_CONFIRMPWDEMPTY);
 
-        AssertUtil.isTrue(!(user.getPassword().equals(oldPassword)), BizCodeEnum.USER_OLDPWDERROR);
+        //比对加密的密码
+        AssertUtil.isTrue(!(encoder.matches(oldPassword, user.getPassword())), BizCodeEnum.USER_OLDPWDERROR);
         AssertUtil.isTrue(!(newPassword.equals(confirmPassword)), BizCodeEnum.USER_NEWPWDERROR);
         AssertUtil.isTrue(newPassword.equals(oldPassword), BizCodeEnum.USER_OLDNEWPWDERROR);
 
         //更新用户密码
-        user.setPassword(newPassword);
+        user.setPassword(encoder.encode(newPassword));
         int result = userMapper.updateById(user);
 
         return result > 0 ? user : null;

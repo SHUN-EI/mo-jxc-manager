@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 
 /**
  * <p>
@@ -38,10 +39,9 @@ public class UserController {
     @ApiOperation("用户密码更新")
     @RequestMapping("/updateUserPassword")
     public RespBean updateUserPassword(String oldPassword, String newPassword,
-                                       String confirmPassword, HttpSession session) {
+                                       String confirmPassword, Principal principal) {
 
-        User user = (User) session.getAttribute("user");
-        User updateUser = userService.updateUserPassword(user.getUsername(), oldPassword, newPassword, confirmPassword);
+        User updateUser = userService.updateUserPassword(principal.getName(), oldPassword, newPassword, confirmPassword);
         return null != updateUser ? RespBean.success("用户密码更新成功", updateUser) :
                 RespBean.buildResult(BizCodeEnum.USER_UPDATEPWDERROR);
 
@@ -55,11 +55,9 @@ public class UserController {
 
     @ApiOperation("用户信息设置页面")
     @RequestMapping("/setting")
-    public String setting(HttpSession session) {
-        User user = (User) session.getAttribute("user");
+    public String setting(Principal principal) {
+        User user = userService.findByUserName(principal.getName());
         //用户修改后数据变化，更新用户到会话中
-        User updateUser = userService.getById(user.getId());
-        session.setAttribute("user", updateUser);
         return "user/setting";
 
     }
