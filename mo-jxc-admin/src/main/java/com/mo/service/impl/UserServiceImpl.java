@@ -81,9 +81,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         //用户名默认是唯一的，非空
         AssertUtil.isTrue(StringUtil.isEmpty(request.getUserName()), BizCodeEnum.USER_NAMEEMPTY);
 
-        User tempUser = findByUserName(request.getUserName());
+        User targetUser = findByUserName(request.getUserName());
         //正在修改的用户id 与 数据库中同名的 用户id  取反 为真 && 同名的用户id 不为空
-        AssertUtil.isTrue(null != tempUser && !(tempUser.getId().equals(request.getId())), BizCodeEnum.USER_NAMEISEXIST);
+        AssertUtil.isTrue(null != targetUser && !(targetUser.getId().equals(request.getId())), BizCodeEnum.USER_NAMEISEXIST);
 
         User user = new User();
         BeanUtils.copyProperties(request, user);

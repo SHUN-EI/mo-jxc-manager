@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -55,11 +56,13 @@ public class UserController {
         return "user/password";
     }
 
+
     @ApiOperation("用户信息设置页面")
     @RequestMapping("/setting")
-    public String setting(Principal principal) {
+    public String setting(Principal principal, Model model) {
         User user = userService.findByUserName(principal.getName());
         //用户修改后数据变化，更新用户到会话中
+        model.addAttribute("user", user);
         return "user/setting";
 
     }
