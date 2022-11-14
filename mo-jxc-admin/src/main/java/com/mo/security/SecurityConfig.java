@@ -1,5 +1,6 @@
 package com.mo.security;
 
+import com.mo.filters.CaptchaCodeFilter;
 import com.mo.model.User;
 import com.mo.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JxcLogoutSuccessHandler jxcLogoutSuccessHandler;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private CaptchaCodeFilter captchaCodeFilter;
 
 
     /**
@@ -85,6 +88,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         //禁用csrf
         http.csrf().disable()
+                //使用自定义的验证码校验过滤器,在登录操作前进行自定义的验证码校验
+                .addFilterBefore(captchaCodeFilter, UsernamePasswordAuthenticationFilter.class)
                 //允许iframe 页面嵌套
                 .headers().frameOptions().disable()
                 .and()
@@ -105,7 +110,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 //放行登录页
-                .antMatchers("/index", "/login","/image").permitAll()
+                .antMatchers("/index", "/login", "/image").permitAll()
                 //其他的请求都要验证
                 .anyRequest().authenticated();
 
