@@ -105,7 +105,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 //放行登录页
-                .antMatchers("/index", "/login").permitAll()
+                .antMatchers("/index", "/login","/image").permitAll()
                 //其他的请求都要验证
                 .anyRequest().authenticated();
 

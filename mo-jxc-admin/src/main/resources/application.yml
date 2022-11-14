@@ -38,6 +38,17 @@ spring:
     settings:
       number_format: 0.##
 
+#验证码配置
+captcha:
+  border: no
+  border_color: 105,179,90
+  font_color: blue
+  image_width: 100
+  image_height: 45
+  session_key: code
+  font_names: \u5B8B\u4F53,\u6977\u4F53,\u5FAE\u8F6F\u96C5\u9ED1
+  font_size: 35
+  char_length: 4
 
 #Mybatis-plus配置
 mybatis-plus:
