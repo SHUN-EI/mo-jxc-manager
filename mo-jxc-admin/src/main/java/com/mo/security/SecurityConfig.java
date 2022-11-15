@@ -18,7 +18,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private IUserService userService;
     @Autowired
     private CaptchaCodeFilter captchaCodeFilter;
+    @Autowired
+    private DataSource dataSource;
 
 
     /**
@@ -52,6 +57,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
+    /**
+     * 配置从数据库中获取token
+     * @return
+     */
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        return tokenRepository;
+    }
 
     /**
      * Spring-Security 认证使用的userDetailsService
@@ -107,6 +123,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/signout")
                 .deleteCookies("JSESSIONID")
                 .logoutSuccessHandler(jxcLogoutSuccessHandler)
+                .and()
+                .rememberMe()
+                .rememberMeParameter("rememberMe")
+                //保存在浏览器端的cookie的名称，如果不设置默认也是remember-me
+                .rememberMeCookieName("remember-me-cookie")
+                //设置token的有效期，即多长时间内可以免除重复登录，单位是秒
+                .tokenValiditySeconds(7 * 24 * 60 * 60)
+                //自定义token 存储
+                .tokenRepository(persistentTokenRepository())
                 .and()
                 .authorizeRequests()
                 //放行登录页
