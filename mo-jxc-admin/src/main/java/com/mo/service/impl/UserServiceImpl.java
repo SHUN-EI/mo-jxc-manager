@@ -1,21 +1,28 @@
 package com.mo.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mo.enums.BizCodeEnum;
 import com.mo.exception.BizException;
 import com.mo.model.User;
 import com.mo.mapper.UserMapper;
+import com.mo.request.UserQueryRequest;
 import com.mo.request.UserUpdateRequest;
 import com.mo.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mo.utils.AssertUtil;
+import com.mo.utils.PageResultUtil;
 import com.mo.utils.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -32,6 +39,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private UserMapper userMapper;
     @Autowired
     private PasswordEncoder encoder;
+
+
+    /**
+     * 用户列表查询
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    public Map<String, Object> userList(UserQueryRequest request) {
+
+        IPage<User> pageInfo = new Page<>(request.getPage(), request.getLimit());
+
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("is_del", 0);
+
+        if (StringUtils.isNoneBlank(request.getUserName())){
+            userQueryWrapper.like("user_name",request.getUserName());
+        }
+
+        IPage<User> userPage = userMapper.selectPage(pageInfo, userQueryWrapper);
+
+        Map<String, Object> resultMap = PageResultUtil.getPageResult(userPage.getTotal(), userPage.getRecords());
+
+        return resultMap;
+    }
 
     /**
      * 用户密码更新

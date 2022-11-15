@@ -3,6 +3,7 @@ package com.mo.controller;
 
 import com.mo.enums.BizCodeEnum;
 import com.mo.model.User;
+import com.mo.request.UserQueryRequest;
 import com.mo.request.UserUpdateRequest;
 import com.mo.service.IUserService;
 import com.mo.utils.RespBean;
@@ -11,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.util.Map;
 
 /**
  * <p>
@@ -35,6 +38,20 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+
+
+    @ApiOperation("用户列表查询")
+    @RequestMapping("/list")
+    @ResponseBody
+    public Map<String, Object> userList(UserQueryRequest request) {
+        return userService.userList(request);
+    }
+
+    @ApiOperation("用户管理主页")
+    @GetMapping("index")
+    public String index() {
+        return "user/user";
+    }
 
 
     @ApiOperation("用户密码更新")
