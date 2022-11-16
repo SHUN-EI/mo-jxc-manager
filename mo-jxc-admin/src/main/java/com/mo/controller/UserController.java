@@ -40,6 +40,16 @@ public class UserController {
     private IUserService userService;
 
 
+    @ApiOperation("添加|更新用户页")
+    @GetMapping("/addOrUpdateUserPage")
+    public String addOrUpdateUserPage(Integer userId, Model model) {
+        if (null != userId)
+            model.addAttribute("user", userService.getById(userId));
+
+        return "user/add_update";
+    }
+
+
     @ApiOperation("用户列表查询")
     @RequestMapping("/list")
     @ResponseBody
