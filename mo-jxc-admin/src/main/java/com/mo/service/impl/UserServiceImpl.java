@@ -8,6 +8,7 @@ import com.mo.exception.BizException;
 import com.mo.model.User;
 import com.mo.mapper.UserMapper;
 import com.mo.request.UserQueryRequest;
+import com.mo.request.UserSaveRequest;
 import com.mo.request.UserUpdateRequest;
 import com.mo.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -40,6 +41,59 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Autowired
     private PasswordEncoder encoder;
 
+    /**
+     * 用户记录添加
+     *
+     * @param request
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public User saveUser(UserSaveRequest request) {
+
+        //用户名不能为空
+        AssertUtil.isTrue(StringUtils.isBlank(request.getUserName()), BizCodeEnum.USER_NAMEEMPTY);
+        //用户名已存在
+        AssertUtil.isTrue(null != findByUserName(request.getUserName()), BizCodeEnum.USER_NAMEISEXIST);
+
+        User user = new User();
+        BeanUtils.copyProperties(request, user);
+        //用户密码默认123456
+        user.setPassword(encoder.encode("123456"));
+        user.setIsDel(0);
+
+        //userMapper.insert(user);
+        AssertUtil.isTrue(!(save(user)), -1, "用户记录添加失败!");
+
+        return user;
+    }
+
+    /**
+     * 用户记录更新
+     *
+     * @param request
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    @Override
+    public User updateUser(UserUpdateRequest request) {
+
+        String userName = request.getUserName();
+
+        //用户名不能为空
+        AssertUtil.isTrue(StringUtils.isBlank(userName), BizCodeEnum.USER_NAMEEMPTY);
+        User targetUser = findByUserName(userName);
+
+        //正在修改的用户id 与 数据库中同名的 用户id  取反 为真 && 同名的用户id 不为空
+        //用户名已存在
+        AssertUtil.isTrue(null != targetUser && !(targetUser.getId().equals(request.getId())), BizCodeEnum.USER_NAMEISEXIST);
+
+        User user = new User();
+        BeanUtils.copyProperties(request, user);
+        AssertUtil.isTrue(!(updateById(user)), -1, "用户记录更新失败!");
+
+        return user;
+    }
 
     /**
      * 用户列表查询
@@ -55,8 +109,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("is_del", 0);
 
-        if (StringUtils.isNoneBlank(request.getUserName())){
-            userQueryWrapper.like("user_name",request.getUserName());
+        if (StringUtils.isNoneBlank(request.getUserName())) {
+            userQueryWrapper.like("user_name", request.getUserName());
         }
 
         IPage<User> userPage = userMapper.selectPage(pageInfo, userQueryWrapper);
@@ -111,10 +165,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public User updateUserInfo(UserUpdateRequest request) {
 
-        //用户名默认是唯一的，非空
-        AssertUtil.isTrue(StringUtil.isEmpty(request.getUserName()), BizCodeEnum.USER_NAMEEMPTY);
+        String userName = request.getUserName();
 
-        User targetUser = findByUserName(request.getUserName());
+        //用户名默认是唯一的，非空
+        AssertUtil.isTrue(StringUtil.isEmpty(userName), BizCodeEnum.USER_NAMEEMPTY);
+
+        User targetUser = findByUserName(userName);
         //正在修改的用户id 与 数据库中同名的 用户id  取反 为真 && 同名的用户id 不为空
         AssertUtil.isTrue(null != targetUser && !(targetUser.getId().equals(request.getId())), BizCodeEnum.USER_NAMEISEXIST);
 

@@ -4,6 +4,7 @@ package com.mo.controller;
 import com.mo.enums.BizCodeEnum;
 import com.mo.model.User;
 import com.mo.request.UserQueryRequest;
+import com.mo.request.UserSaveRequest;
 import com.mo.request.UserUpdateRequest;
 import com.mo.service.IUserService;
 import com.mo.utils.RespBean;
@@ -12,12 +13,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
@@ -38,6 +36,23 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+
+
+    @ApiOperation("用户记录更新")
+    @PostMapping("/update")
+    @ResponseBody
+    public RespBean updateUser(UserUpdateRequest request) {
+        User user =userService.updateUser(request);
+        return RespBean.success("用户记录更新成功!",user);
+    }
+
+    @ApiOperation("用户记录添加")
+    @PostMapping("/save")
+    @ResponseBody
+    public RespBean saveUser(UserSaveRequest request) {
+        User user = userService.saveUser(request);
+        return RespBean.success("用户记录添加成功!",user);
+    }
 
 
     @ApiOperation("添加|更新用户页")

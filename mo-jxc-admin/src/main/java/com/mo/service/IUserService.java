@@ -3,6 +3,7 @@ package com.mo.service;
 import com.mo.model.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mo.request.UserQueryRequest;
+import com.mo.request.UserSaveRequest;
 import com.mo.request.UserUpdateRequest;
 
 import java.util.Map;
@@ -26,4 +27,8 @@ public interface IUserService extends IService<User> {
     User updateUserPassword(String userName, String oldPassword, String newPassword, String confirmPassword);
 
     Map<String, Object> userList(UserQueryRequest request);
+
+    User saveUser(UserSaveRequest request);
+
+    User updateUser(UserUpdateRequest request);
 }
